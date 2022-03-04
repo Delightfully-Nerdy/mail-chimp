@@ -38,21 +38,33 @@ app.post("/", function (req, res) {
 
     const options = {
         method: "POST",
-        auth: "dalitso:dede720f0f3e2bafb643f0aea59de039-us20"
+        auth: "dalitso:42661f5c83dc095d3779a3688a025814-us20",
     }
 
     const request = https.request(url, options, function (response) {
-        response.on("data", function (data) {
-            console.log(JSON.parse(data));
-        });
+
+        if (response.statusCode === 200) {
+            res.sendFile(__dirname + "/success.html");
+            // res.send("Successfully subscribed!")
+        } else {
+            res.sendFile(__dirname + "/failure.html");
+            // res.send("There was an error with signing up, please try again");
+        }
+
+
+        // response.on("data", function (data) {
+        //     console.log(JSON.parse(data));
+        // });
     });
 
     request.write(jsonData);
     request.end();
 
-
-
 });
+
+app.post("/failure", function (req, res) {
+    res.redirect("/")
+})
 
 app.listen(3000, function () {
     console.log("server is running on port 3000");
